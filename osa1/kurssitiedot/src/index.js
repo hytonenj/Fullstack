@@ -23,9 +23,9 @@ const Part = (props) => {
 const Content = (props) => {
   return (
   <div>
-    <Part p1={props.p1} ex1 = {props.ex1}/>
-    <Part p2={props.p2} ex2 = {props.ex2}/>
-    <Part p3={props.p3} ex3 = {props.ex3}/>  
+    <Part p1={props.parts[0].name} ex1 = {props.parts[0].exercises}/>
+    <Part p2={props.parts[1].name} ex2 = {props.parts[1].exercises}/>
+    <Part p3={props.parts[2].name} ex3 = {props.parts[2].exercises}/>  
   </div>
   )
 }
@@ -33,10 +33,39 @@ const Content = (props) => {
 const Total = (props) => {
   return (
   <div>
-    <p>Yhteensä {props.ex1+props.ex2+props.ex3} tehtävää</p>
+    <p>Yhteensä {props.parts[0].exercises+props.parts[1].exercises+
+      props.parts[2].exercises} tehtävää</p>
   </div>
   )
 }
+
+const App = () => {
+  const course = 'Half Stack -sovelluskehitys'
+  const parts = [
+    {
+      name: 'Reactin perusteet',
+      exercises: 10
+    },
+    {
+      name: 'Tiedonvälitys propseilla',
+      exercises: 7
+    },
+    {
+      name: 'Komponenttien tila',
+      exercises: 14
+    }
+  ]
+  console.log(parts[0].name)
+  return (
+    <div>
+      <Header course={course}/>
+      <Content parts = {parts}/>
+      <Total parts = {parts}/>
+      
+    </div>
+  )
+}
+
 /*
 const App = () => {
   const course = 'Half Stack -sovelluskehitys'
@@ -56,7 +85,7 @@ const App = () => {
     </div>
   )
 }
-*/
+
 
 const App = () => {
   const course = 'Half Stack -sovelluskehitys'
@@ -84,6 +113,6 @@ const App = () => {
     </div>
   )
 }
-
+*/
 
 ReactDOM.render(<App />, document.getElementById('root'))
