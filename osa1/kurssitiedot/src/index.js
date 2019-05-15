@@ -13,9 +13,7 @@ const Header = (props) => {
 const Part = (props) => {
   return (
   <div>
-    <p>{props.p1} {props.ex1}</p>
-    <p>{props.p2} {props.ex2}</p>
-    <p>{props.p3} {props.ex3}</p>
+    <p>{props.p.name} {props.p.exercises}</p>
   </div>
   )
 }
@@ -23,9 +21,9 @@ const Part = (props) => {
 const Content = (props) => {
   return (
   <div>
-    <Part p1={props.parts[0].name} ex1 = {props.parts[0].exercises}/>
-    <Part p2={props.parts[1].name} ex2 = {props.parts[1].exercises}/>
-    <Part p3={props.parts[2].name} ex3 = {props.parts[2].exercises}/>  
+    <Part p = {props.parts[0]}/>
+    <Part p = {props.parts[1]}/>
+    <Part p = {props.parts[2]}/>
   </div>
   )
 }
@@ -39,6 +37,40 @@ const Total = (props) => {
   )
 }
 
+//1.5
+const App = () => {
+  const course = {
+    name: 'Half Stack -sovelluskehitys',
+    parts: [
+      {
+        name: 'Reactin perusteet',
+        exercises: 10
+      },
+      {
+        name: 'Tiedonvälitys propseilla',
+        exercises: 7
+      },
+      {
+        name: 'Komponenttien tila',
+        exercises: 14
+      }
+    ]
+  }
+
+  return (
+    <div>
+      <Header course={course.name}/>
+      <Content parts = {course.parts}/>
+      <Total parts = {course.parts}/>
+    </div>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+
+//Earlier steps
+//1.4
+/*
 const App = () => {
   const course = 'Half Stack -sovelluskehitys'
   const parts = [
@@ -66,27 +98,7 @@ const App = () => {
   )
 }
 
-/*
-const App = () => {
-  const course = 'Half Stack -sovelluskehitys'
-  const part1 = 'Reactin perusteet'
-  const exercises1 = 10
-  const part2 = 'Tiedonvälitys propseilla'
-  const exercises2 = 7
-  const part3 = 'Komponenttien tila'
-  const exercises3 = 14
-
-  return (
-    <div>
-      <Header course = {course}/>
-      <Content ex1={exercises1} ex2 = {exercises2} ex3={exercises3} 
-      p1 = {part1} p2 = {part2} p3={part3}/>
-      <Total ex1={exercises1} ex2 = {exercises2} ex3={exercises3}/>
-    </div>
-  )
-}
-
-
+//1.3
 const App = () => {
   const course = 'Half Stack -sovelluskehitys'
   const part1 = {
@@ -113,6 +125,25 @@ const App = () => {
     </div>
   )
 }
-*/
 
-ReactDOM.render(<App />, document.getElementById('root'))
+//1.2
+const App = () => {
+  const course = 'Half Stack -sovelluskehitys'
+  const part1 = 'Reactin perusteet'
+  const exercises1 = 10
+  const part2 = 'Tiedonvälitys propseilla'
+  const exercises2 = 7
+  const part3 = 'Komponenttien tila'
+  const exercises3 = 14
+
+  return (
+    <div>
+      <Header course = {course}/>
+      <Content ex1={exercises1} ex2 = {exercises2} ex3={exercises3} 
+      p1 = {part1} p2 = {part2} p3={part3}/>
+      <Total ex1={exercises1} ex2 = {exercises2} ex3={exercises3}/>
+    </div>
+  )
+}
+
+*/
