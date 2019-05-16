@@ -14,13 +14,29 @@ const App = () => {
       <Button handleClick={()=> setNeutral(neutral+1)} text = 'neutraali'/>
       <Button handleClick={()=> setBad(bad+1)} text = 'huono'/>
       <br></br>
-      <Statistics/>
-      <List text='hyvä' com={good}/>
-      <List text='neutraali' com={neutral}/>
-      <List text='huono' com={bad}/>
-      <Sum g = {good} b = {bad} n = {neutral}/>
-      <Average g = {good} b = {bad} n = {neutral}/>
-      <Positive g = {good} b = {bad} n = {neutral}/>
+      <h3>statistiikka</h3>
+      <Statistics g = {good} b = {bad} n = {neutral}/>
+      
+    </div>
+  )
+}
+
+const Statistics = (props)=>{
+  const{g,n,b} = props
+  let sum = g+n+b
+  if(sum===0){
+    return(
+      <p>Ei yhtään palautetta annettu</p>
+    )
+  }
+  return(
+    <div>
+      <List text = 'hyvä' com = {g}/>
+      <List text = 'neutraali' com = {n}/>
+      <List text = 'huono' com = {b}/>
+      <Sum g = {g} b = {b} n = {n}/>
+      <Average g = {g} b = {b} n = {n}/>
+      <Positive g = {g} b = {b} n = {n}/>
     </div>
   )
 }
@@ -68,10 +84,6 @@ const Header = () =>{
     <h3>anna palautetta</h3>
   )
 }
-
-const Statistics = () =>(
-  <h3>statistiikka</h3>
-)
 
 ReactDOM.render(<App />, 
   document.getElementById('root')
