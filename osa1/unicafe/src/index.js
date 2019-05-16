@@ -18,9 +18,37 @@ const App = () => {
       <List text='hyvä' com={good}/>
       <List text='neutraali' com={neutral}/>
       <List text='huono' com={bad}/>
+      <Sum g = {good} b = {bad} n = {neutral}/>
+      <Average g = {good} b = {bad} n = {neutral}/>
+      <Positive g = {good} b = {bad} n = {neutral}/>
     </div>
   )
 }
+
+const Positive = (props)=>{
+  const {g, n, b} = props
+  let sum = g+n+b
+  let pos = g/sum*100
+  return(
+    <p>positiivisia {pos} %</p>
+  )
+}
+
+const Average = (props)=>{
+  const {g, n, b} = props
+  //let or const--?
+  let summa = g+n+b
+  let luku = g-b
+  let ka = luku/summa
+
+  return(
+    <p>keskiarvo {ka}</p>
+  )
+}
+
+const Sum = (props) =>(
+  <p>yhteensä {props.g + props.n + props.b}</p>
+)
 
 const List = (props) =>{
   return(
