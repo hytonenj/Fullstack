@@ -9,7 +9,7 @@ const App = () => {
 
   return (
     <div>
-      <Header/>
+      <h3>anna palautetta</h3>
       <Button handleClick={()=> setGood(good+1)} text = 'hyvä'/>
       <Button handleClick={()=> setNeutral(neutral+1)} text = 'neutraali'/>
       <Button handleClick={()=> setBad(bad+1)} text = 'huono'/>
@@ -23,52 +23,33 @@ const App = () => {
 
 const Statistics = (props)=>{
   const{g,n,b} = props
-  let sum = g+n+b
+  const sum = g+n+b
+  const ka = (g-b)/sum
+  const pos = g/sum*100 + ' %'
+
   if(sum===0){
     return(
       <p>Ei yhtään palautetta annettu</p>
     )
   }
+
   return(
-    <div>
-      <List text = 'hyvä' com = {g}/>
-      <List text = 'neutraali' com = {n}/>
-      <List text = 'huono' com = {b}/>
-      <Sum g = {g} b = {b} n = {n}/>
-      <Average g = {g} b = {b} n = {n}/>
-      <Positive g = {g} b = {b} n = {n}/>
-    </div>
+    <table>
+      <Statistic text = 'hyvä' value = {g}/>
+      <Statistic text = 'neutraali' value = {n}/>
+      <Statistic text = 'huono' value = {b}/>
+      <Statistic text = 'yhteensä' value = {sum}/>
+      <Statistic text = 'keskiarvo' value = {ka}/>
+      <Statistic text = 'positiivisia' value = {pos}/>
+    </table>
   )
 }
 
-const Positive = (props)=>{
-  const {g, n, b} = props
-  let sum = g+n+b
-  let pos = g/sum*100
-  return(
-    <p>positiivisia {pos} %</p>
-  )
-}
-
-const Average = (props)=>{
-  const {g, n, b} = props
-  //let or const--?
-  let summa = g+n+b
-  let luku = g-b
-  let ka = luku/summa
-
-  return(
-    <p>keskiarvo {ka}</p>
-  )
-}
-
-const Sum = (props) =>(
-  <p>yhteensä {props.g + props.n + props.b}</p>
-)
-
-const List = (props) =>{
-  return(
-    <p>{props.text} {props.com}</p>
+const Statistic = (props) => {
+  return (
+    <tr>
+    <td>{props.text} {props.value}</td>
+    </tr>
   )
 }
 
@@ -76,12 +57,6 @@ const Button = (props) =>{
   return(
     <button onClick = {props.handleClick}>
     {props.text}</button>
-  )
-}
-
-const Header = () =>{
-  return(
-    <h3>anna palautetta</h3>
   )
 }
 
