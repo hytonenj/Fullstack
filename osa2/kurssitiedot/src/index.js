@@ -5,22 +5,23 @@ const Header = props =>
   <h1>{props.course}</h1>
 
 const Total = props => {
-  var total = 0
-  props.parts.forEach(element => {
-    total += element.exercises
-  });
-  return <p>yhteensä {total} tehtävää</p>
+  const list = props.parts
+  const arr = list.map(e => e.exercises)
+  const sum = arr.reduce((total, amount) => total + amount)
+  return (
+    <div>
+      <p>yhteensä {sum} tehtävää</p>
+    </div>
+  )
 }
-
 
 const Part = props =>
   <p>{props.part.name} {props.part.exercises}</p>
 
 const Content = props => {
   const list = props.parts
-
   const rows = () =>
-    list.map(e => <Part part={e}/>)
+    list.map(e => <Part part={e} />)
 
   return (
     <div>
@@ -33,7 +34,7 @@ const Course = (props) => {
     <div>
       <Header course={props.course.name} />
       <Content parts={props.course.parts} />
-      <Total parts={props.course.parts}/>
+      <Total parts={props.course.parts} />
     </div>
   )
 }
