@@ -21,7 +21,7 @@ const Part = props =>
 const Content = props => {
   const list = props.parts
   const rows = () =>
-    list.map(e => <Part part={e} />)
+    list.map(e => <Part key={e.id} part={e} />)
 
   return (
     <div>
@@ -40,34 +40,60 @@ const Course = (props) => {
 }
 
 const App = () => {
-  const course = {
-    name: 'Half Stack -sovelluskehitys',
-    parts: [
-      {
-        name: 'Reactin perusteet',
-        exercises: 10,
-        id: 1
-      },
-      {
-        name: 'Tiedonvälitys propseilla',
-        exercises: 7,
-        id: 2
-      },
-      {
-        name: 'Komponenttien tila',
-        exercises: 14,
-        id: 3
-      }
 
-    ]
-  }
+  const courses = [
+    {
+      name: 'Half Stack -sovelluskehitys',
+      id: 1,
+      parts: [
+        {
+          name: 'Reactin perusteet',
+          exercises: 10,
+          id: 1
+        },
+        {
+          name: 'Tiedonvälitys propseilla',
+          exercises: 7,
+          id: 2
+        },
+        {
+          name: 'Komponenttien tila',
+          exercises: 14,
+          id: 3
+        }
+      ]
+    },
+    {
+      name: 'Node.js',
+      id: 2,
+      parts: [
+        {
+          name: 'Routing',
+          exercises: 3,
+          id: 1
+        },
+        {
+          name: 'Middlewaret',
+          exercises: 7,
+          id: 2
+        }
+      ]
+    }
+  ]
 
+  const list = courses.map(e =>
+    <Course key = {e.id} course = {e}/>
+  )
+//console.log(list);
+// I assume this is correct way to do this until told otherwise
   return (
     <div>
-      <Course course={course} />
+      {list}
     </div>
   )
 }
+
+
 
 ReactDOM.render(
   <App />,
