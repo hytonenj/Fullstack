@@ -5,7 +5,7 @@ const App = () => {
 
   const [countries, setCountries] = useState([])
   const [newFilter, setNewFilter] = useState('')
-  
+
 
   useEffect(() => {
     axios.get('https://restcountries.eu/rest/v2/all').then(response => {
@@ -39,14 +39,14 @@ const App = () => {
 
 }
 
-const Country = ({ name, capital, population, languages, flag}) => {
+const Country = ({ name, capital, population, languages, flag }) => {
 
   const [open, setOpen] = useState(false)
 
   return (
     <div>
       {
-          open ? <div><OpenCountry capital={capital} population={population} languages={languages}
+        open ? <div><OpenCountry capital={capital} population={population} languages={languages}
           flag={flag} name={name} /> <button onClick={() => setOpen(false)}>close</button> </div> :
           <div>{name} <button onClick={() => setOpen(true)}> open </button></div>
       }
@@ -61,12 +61,42 @@ const OpenCountry = ({ name, capital, population, languages, flag }) => {
       <h1>{name}</h1>
       <p>capital {capital}</p>
       <p>population {population}</p>
+      <p><h3>languages</h3></p>
       <ul>
-        {languages.map(l => <li>{l.name}</li>)}
+        {languages.map(l => <li key={l.name}>{l.name}</li>)}
       </ul>
       <img src={flag} width="160" height="120"></img>
+      <Weather capital={capital} />
     </div>
   )
+}
+
+const Weather = ({ capital }) => {
+  const [weather, setWeather] = useState('')
+
+  useEffect(() => {
+    axios.get(`https://api.apixu.com/v1/current.json?key=614eb9b104aa4473ada190104192005&q=${capital}`).then(response => {
+      setWeather(response.data)
+    })
+  }, [])
+  if (weather) {
+    return (
+      <div>
+        <h1>Weather in {capital}</h1>
+        <br></br>
+        <b>temperature: {weather.current.temp_c} Celsius</b>
+        <br></br>
+        <img src={weather.current.condition.icon}></img>
+        <br></br>
+        <b>Wind: {weather.current.wind_kph} kph direction {weather.current.wind_dir}</b>
+      </div>
+    )
+  }else{
+    return(
+      null
+    )
+  }
+
 }
 
 export default App
