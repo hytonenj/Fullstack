@@ -14,18 +14,19 @@ const App = () => {
   //adding person
   const addPerson = (event) =>{
     event.preventDefault()
+    //console.log(persons.name);
     
     const personObject = {
       name : newName
     }
-
+    persons.some(e=>e.name===newName)?window.alert(`${newName} on jo luettelossa`):
     setPersons(persons.concat(personObject))
     setNewName('')
   }
 
   //name change
   const handleNameChange = (event) =>{
-    console.log(event.target.value)
+    //console.log(event.target.value)
     setNewName(event.target.value)
   }
 
