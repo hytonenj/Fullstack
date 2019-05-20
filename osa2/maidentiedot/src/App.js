@@ -40,7 +40,7 @@ const App = () => {
 }
 
 const Country = ({ name, capital, population, languages, flag}) => {
-  //console.log({ flag })
+
   const [open, setOpen] = useState(false)
 
   return (
