@@ -1,17 +1,25 @@
 import React, { useState } from 'react'
 
 const App = () => {
-  const [ persons, setPersons] = useState([
-    { name: 'Jimi',
-    number: '045-000000'}
-  ]) 
+    const [persons, setPersons] = useState([
+        { name: 'Arto Hellas', number: '040-123456' },
+        { name: 'Martti Tienari', number: '040-123456' },
+        { name: 'Arto Järvinen', number: '040-123456' },
+        { name: 'Lea Kutvonen', number: '040-123456' }
+      ])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
+  const [ newFilter, setNewFilter ] = useState('')
 
-  // list persons function
-  const rows = () => persons.map(person =>
+  /* list persons function
+  const rows = (list) => list.map(person =>
     <Person key={person.name} name = {person.name} number={person.number}/>
   )
+*/
+  //list persons with filter
+  const rows = () => persons.filter(person=>person.name.toLowerCase().includes(newFilter.toLowerCase()))
+  .map(person=><Person key={person.name} name = {person.name} number={person.number}/>)
+
 
   //adding person
   const addPerson = (event) =>{
@@ -40,9 +48,20 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  const handleFilter = (event) =>{
+    setNewFilter(event.target.value)
+    
+  }
+
+
   return (
     <div>
       <h2>Puhelinluettelo</h2>
+      <div>
+          rajaa näytettäviä: 
+          <input onChange = {handleFilter}/>
+      </div>
+      <h3>lisää uusi</h3>
       <form onSubmit={addPerson}>
         <div>
           nimi: <input value = {newName}
