@@ -5,6 +5,7 @@ const App = () => {
 
   const [countries, setCountries] = useState([])
   const [newFilter, setNewFilter] = useState('')
+  
 
   useEffect(() => {
     axios.get('https://restcountries.eu/rest/v2/all').then(response => {
@@ -15,9 +16,9 @@ const App = () => {
 
   const rows = () => {
     const list = countries.filter(country => country.name.toLowerCase().includes(newFilter.toLowerCase()))
-      .map(country => <Country key={country.name} name={country.name} capital={country.capital} 
-      population={country.population} languages={country.languages} flag={country.flag}/>)
-    
+      .map(country => <Country key={country.name} name={country.name} capital={country.capital}
+        population={country.population} languages={country.languages} flag={country.flag} />)
+
     return (
       list.length > 10 ? <p>Too many matches, specify another filter</p> : list
     )
@@ -38,15 +39,30 @@ const App = () => {
 
 }
 
-const Country = ({name, capital, population, languages, flag}) => {
-  console.log({flag})
+const Country = ({ name, capital, population, languages, flag}) => {
+  //console.log({ flag })
+  const [open, setOpen] = useState(false)
+
+  return (
+    <div>
+      {
+          open ? <div><OpenCountry capital={capital} population={population} languages={languages}
+          flag={flag} name={name} /> <button onClick={() => setOpen(false)}>close</button> </div> :
+          <div>{name} <button onClick={() => setOpen(true)}> open </button></div>
+      }
+    </div>
+  )
+}
+
+const OpenCountry = ({ name, capital, population, languages, flag }) => {
+
   return (
     <div>
       <h1>{name}</h1>
       <p>capital {capital}</p>
       <p>population {population}</p>
       <ul>
-        {languages.map(l=><li>{l.name}</li>)}
+        {languages.map(l => <li>{l.name}</li>)}
       </ul>
       <img src={flag} width="160" height="120"></img>
     </div>
