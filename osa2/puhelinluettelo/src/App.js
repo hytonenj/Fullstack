@@ -5,9 +5,7 @@ import Filter from './components/Filter'
 import axios from 'axios'
 
 const App = () => {
-    const [persons, setPersons] = useState([
-        { name: 'Arto Hellas', number: '040-123456' }
-    ])
+    const [persons, setPersons] = useState([])
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [newFilter, setNewFilter] = useState('')
@@ -33,10 +31,21 @@ const App = () => {
             name: newName,
             number: newNumber
         }
+
+        axios
+        .post('http://localhost:3001/persons', personObject)
+        .then(response => {
+            setPersons(persons.concat(response.data))
+            setNewName('')
+            setNewNumber('')
+        })
+        
+        /*
         persons.some(e => e.name === newName) ? window.alert(`${newName} on jo luettelossa`) :
             setPersons(persons.concat(personObject))
         setNewName('')
         setNewNumber('')
+        */
     }
 
     //name change
