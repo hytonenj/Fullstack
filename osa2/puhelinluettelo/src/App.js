@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Person from './components/Person'
 import Submitform from './components/Submitform'
 import Filter from './components/Filter'
-import axios from 'axios'
+import personService from './services/persons'
 
 const App = () => {
     const [persons, setPersons] = useState([])
@@ -11,10 +11,10 @@ const App = () => {
     const [newFilter, setNewFilter] = useState('')
 
     useEffect(() => {
-        axios.get('http://localhost:3001/persons').then(response => {
-            setPersons(response.data)
-        })
-    },[])
+        personService.getAll().then(response => {
+                setPersons(response.data)
+            })
+    }, [])
 
 
     //list persons with filter
@@ -32,14 +32,13 @@ const App = () => {
             number: newNumber
         }
 
-        axios
-        .post('http://localhost:3001/persons', personObject)
-        .then(response => {
-            setPersons(persons.concat(response.data))
-            setNewName('')
-            setNewNumber('')
-        })
-        
+        personService.create(personObject)
+            .then(response => {
+                setPersons(persons.concat(response.data))
+                setNewName('')
+                setNewNumber('')
+            })
+
         /*
         persons.some(e => e.name === newName) ? window.alert(`${newName} on jo luettelossa`) :
             setPersons(persons.concat(personObject))
@@ -71,9 +70,9 @@ const App = () => {
             <h2>Puhelinluettelo</h2>
             <Filter handleFilter={handleFilter} />
             <h3>lisää uusi</h3>
-            <Submitform addPerson={addPerson} newName = {newName}
-            handleNameChange = {handleNameChange} newNumber = {newNumber}
-            handleNumberChange = {handleNumberChange} />
+            <Submitform addPerson={addPerson} newName={newName}
+                handleNameChange={handleNameChange} newNumber={newNumber}
+                handleNumberChange={handleNumberChange} />
             <h2>Numerot</h2>
             <ul>{rows()}</ul>
         </div>
