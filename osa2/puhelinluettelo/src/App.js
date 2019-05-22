@@ -13,25 +13,25 @@ const App = () => {
     //list persons
     useEffect(() => {
         personService.getAll().then(response => {
-                setPersons(response.data)
-            })
+            setPersons(response.data)
+        })
     }, [])
 
     //delete person
     const removePerson = id => {
         const person = persons.find(n => n.id === id)
-        if(window.confirm(`poistetaanko ${person.name}`)){
+        if (window.confirm(`poistetaanko ${person.name}`)) {
             personService.remove(id)
-            .then(response =>{
-                setPersons(persons.filter(p => p.id !== id))
-            })
+                .then(response => {
+                    setPersons(persons.filter(p => p.id !== id))
+                })
         }
-      
+
     }
 
     //list persons with filter
     const rows = () => persons.filter(person => person.name.toLowerCase().includes(newFilter.toLowerCase()))
-        .map(person => <Person key={person.name} name={person.name} number={person.number} removePerson={removePerson} id = {person.id}/>)
+        .map(person => <Person key={person.name} name={person.name} number={person.number} removePerson={removePerson} id={person.id} />)
 
 
     //add person
@@ -44,13 +44,23 @@ const App = () => {
             number: newNumber
         }
 
+        if(persons.some(e=>e.name===newName)){
+            window.confirm(`${newName} on jo luettelossa, korvataanko vanha numero uudella?`)
+            const person = persons.find(n => n.name === newName) //find person with the name
+            const changedPerson = {...person, number:newNumber} //copy person object and change his number
+            
+            personService.update(person.id, changedPerson)
+            .then(response =>{
+                setPersons(persons.map(p => p.id !== person.id ? p : response.data))
+            })
+        }else{
         personService.create(personObject)
             .then(response => {
                 setPersons(persons.concat(response.data))
                 setNewName('')
                 setNewNumber('')
             })
-
+        }
     }
 
     //name change
