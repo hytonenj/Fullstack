@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import Person from './components/Person'
 import Submitform from './components/Submitform'
 import Filter from './components/Filter'
 import personService from './services/persons'
+import Person from './components/Person'
 
 const App = () => {
     const [persons, setPersons] = useState([])
@@ -10,19 +10,31 @@ const App = () => {
     const [newNumber, setNewNumber] = useState('')
     const [newFilter, setNewFilter] = useState('')
 
+    //list persons
     useEffect(() => {
         personService.getAll().then(response => {
                 setPersons(response.data)
             })
     }, [])
 
+    //delete person
+    const removePerson = id => {
+        const person = persons.find(n => n.id === id)
+        if(window.confirm(`poistetaanko ${person.name}`)){
+            personService.remove(id)
+            .then(response =>{
+                setPersons(persons.filter(p => p.id !== id))
+            })
+        }
+      
+    }
 
     //list persons with filter
     const rows = () => persons.filter(person => person.name.toLowerCase().includes(newFilter.toLowerCase()))
-        .map(person => <Person key={person.name} name={person.name} number={person.number} />)
+        .map(person => <Person key={person.name} name={person.name} number={person.number} removePerson={removePerson} id = {person.id}/>)
 
 
-    //adding person
+    //add person
     const addPerson = (event) => {
         event.preventDefault()
         //console.log(persons.name);
@@ -39,31 +51,21 @@ const App = () => {
                 setNewNumber('')
             })
 
-        /*
-        persons.some(e => e.name === newName) ? window.alert(`${newName} on jo luettelossa`) :
-            setPersons(persons.concat(personObject))
-        setNewName('')
-        setNewNumber('')
-        */
     }
 
     //name change
     const handleNameChange = (event) => {
-        //console.log(event.target.value)
         setNewName(event.target.value)
     }
 
     //number change
     const handleNumberChange = (event) => {
-        //console.log(event.target.value)
         setNewNumber(event.target.value)
     }
 
     const handleFilter = (event) => {
         setNewFilter(event.target.value)
-
     }
-
 
     return (
         <div>
