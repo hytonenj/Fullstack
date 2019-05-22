@@ -9,6 +9,7 @@ const App = () => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [newFilter, setNewFilter] = useState('')
+    const [errorMessage, setErrorMessage] = useState(null)
 
     //list persons
     useEffect(() => {
@@ -25,6 +26,10 @@ const App = () => {
                 .then(response => {
                     setPersons(persons.filter(p => p.id !== id))
                 })
+            setErrorMessage(`Poistettiin ${person.name}`)
+            setTimeout(() => {
+                setErrorMessage(null)
+            }, 3000)
         }
 
     }
@@ -44,22 +49,32 @@ const App = () => {
             number: newNumber
         }
 
-        if(persons.some(e=>e.name===newName)){
+        if (persons.some(e => e.name === newName)) {
             window.confirm(`${newName} on jo luettelossa, korvataanko vanha numero uudella?`)
             const person = persons.find(n => n.name === newName) //find person with the name
-            const changedPerson = {...person, number:newNumber} //copy person object and change his number
-            
+            const changedPerson = { ...person, number: newNumber } //copy person object and change his number
+
             personService.update(person.id, changedPerson)
-            .then(response =>{
-                setPersons(persons.map(p => p.id !== person.id ? p : response.data))
-            })
-        }else{
-        personService.create(personObject)
-            .then(response => {
-                setPersons(persons.concat(response.data))
-                setNewName('')
-                setNewNumber('')
-            })
+                .then(response => {
+                    setPersons(persons.map(p => p.id !== person.id ? p : response.data))
+                })
+            setErrorMessage(`Muunnettiin henkilön ${newName}  numero`)
+            setTimeout(() => {
+                setErrorMessage(null)
+            }, 3000)
+
+        } else {
+            personService.create(personObject)
+                .then(response => {
+                    setPersons(persons.concat(response.data))
+                    setNewName('')
+                    setNewNumber('')
+                })
+            setErrorMessage(`Lisättiin ${newName}`)
+            setTimeout(() => {
+                setErrorMessage(null)
+            }, 3000)
+
         }
     }
 
@@ -80,6 +95,7 @@ const App = () => {
     return (
         <div>
             <h2>Puhelinluettelo</h2>
+            <Notification message={errorMessage} />
             <Filter handleFilter={handleFilter} />
             <h3>lisää uusi</h3>
             <Submitform addPerson={addPerson} newName={newName}
@@ -90,6 +106,18 @@ const App = () => {
         </div>
     )
 
+}
+
+const Notification = ({ message }) => {
+    if (message === null) {
+        return null
+    }
+
+    return (
+        <div className="error">
+            {message}
+        </div>
+    )
 }
 
 export default App
