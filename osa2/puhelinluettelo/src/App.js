@@ -10,6 +10,7 @@ const App = () => {
     const [newNumber, setNewNumber] = useState('')
     const [newFilter, setNewFilter] = useState('')
     const [errorMessage, setErrorMessage] = useState(null)
+    const [notification, setNotification] = useState(null)
 
     //list persons
     useEffect(() => {
@@ -26,9 +27,9 @@ const App = () => {
                 .then(response => {
                     setPersons(persons.filter(p => p.id !== id))
                 })
-            setErrorMessage(`Poistettiin ${person.name}`)
+            setNotification(`Poistettiin ${person.name}`)
             setTimeout(() => {
-                setErrorMessage(null)
+                setNotification(null)
             }, 3000)
         }
 
@@ -50,18 +51,26 @@ const App = () => {
         }
 
         if (persons.some(e => e.name === newName)) {
-            window.confirm(`${newName} on jo luettelossa, korvataanko vanha numero uudella?`)
-            const person = persons.find(n => n.name === newName) //find person with the name
-            const changedPerson = { ...person, number: newNumber } //copy person object and change his number
+            if (window.confirm(`${newName} on jo luettelossa, korvataanko vanha numero uudella?`)) {
+                const person = persons.find(n => n.name === newName) //find person with the name
+                const changedPerson = { ...person, number: newNumber } //copy person object and change his number
 
-            personService.update(person.id, changedPerson)
-                .then(response => {
-                    setPersons(persons.map(p => p.id !== person.id ? p : response.data))
-                })
-            setErrorMessage(`Muunnettiin henkilön ${newName}  numero`)
-            setTimeout(() => {
-                setErrorMessage(null)
-            }, 3000)
+                personService.update(person.id, changedPerson)
+                    .then(response => {
+                        setPersons(persons.map(p => p.id !== person.id ? p : response.data))
+                        setNotification(`Muunnettiin henkilön ${newName}  numero`)
+                        setTimeout(() => {
+                            setNotification(null)
+                        }, 3000)
+                    }).catch(error => {
+                        setErrorMessage(`Henkilö ${person.name} oli jo poistettu`)
+                        setTimeout(() => {
+                            setErrorMessage(null)
+                        }, 3000)
+                        setPersons(persons.filter(p=>p.name!==newName));
+                    })
+
+            }
 
         } else {
             personService.create(personObject)
@@ -69,10 +78,15 @@ const App = () => {
                     setPersons(persons.concat(response.data))
                     setNewName('')
                     setNewNumber('')
+                }).catch(error => {
+                    setErrorMessage(`Error`)
+                    setTimeout(() => {
+                        setErrorMessage(null)
+                    }, 3000)
                 })
-            setErrorMessage(`Lisättiin ${newName}`)
+            setNotification(`Lisättiin ${newName}`)
             setTimeout(() => {
-                setErrorMessage(null)
+                setNotification(null)
             }, 3000)
 
         }
@@ -95,7 +109,8 @@ const App = () => {
     return (
         <div>
             <h2>Puhelinluettelo</h2>
-            <Notification message={errorMessage} />
+            <Notification message={notification} />
+            <Error message={errorMessage} />
             <Filter handleFilter={handleFilter} />
             <h3>lisää uusi</h3>
             <Submitform addPerson={addPerson} newName={newName}
@@ -114,10 +129,23 @@ const Notification = ({ message }) => {
     }
 
     return (
+        <div className="notification">
+            {message}
+        </div>
+    )
+}
+
+const Error = ({ message }) => {
+    if (message === null) {
+        return null
+    }
+
+    return (
         <div className="error">
             {message}
         </div>
     )
 }
+
 
 export default App
