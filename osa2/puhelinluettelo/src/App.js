@@ -50,7 +50,7 @@ const App = () => {
             number: newNumber
         }
 
-        if (persons.some(e => e.name === newName)) {
+        if (persons.map(p => p.name).includes(newName)) {
             if (window.confirm(`${newName} on jo luettelossa, korvataanko vanha numero uudella?`)) {
                 const person = persons.find(n => n.name === newName) //find person with the name
                 const changedPerson = { ...person, number: newNumber } //copy person object and change his number
