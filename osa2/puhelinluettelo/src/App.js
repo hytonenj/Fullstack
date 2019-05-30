@@ -67,7 +67,7 @@ const App = () => {
                         setTimeout(() => {
                             setErrorMessage(null)
                         }, 3000)
-                        setPersons(persons.filter(p=>p.name!==newName));
+                        setPersons(persons.filter(p => p.name !== newName));
                     })
 
             }
@@ -76,18 +76,19 @@ const App = () => {
             personService.create(personObject)
                 .then(response => {
                     setPersons(persons.concat(response.data))
+
+                    setNotification(`Lisättiin ${newName}`)
+                    setTimeout(() => {
+                        setNotification(null)
+                    }, 3000)
                     setNewName('')
                     setNewNumber('')
                 }).catch(error => {
-                    setErrorMessage(`Error`)
+                    setErrorMessage(`${error.response.data.error}`)
                     setTimeout(() => {
                         setErrorMessage(null)
                     }, 3000)
                 })
-            setNotification(`Lisättiin ${newName}`)
-            setTimeout(() => {
-                setNotification(null)
-            }, 3000)
 
         }
     }
